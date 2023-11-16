@@ -3,7 +3,7 @@ import datetime
 import pandas as pd
 
 ticker = 'GOOGL'
-today = datetime.datetime(2023, 11, 12)
+today = datetime.now()
 
 start_time = datetime.datetime(today.year, today.month, today.day, 0, 0)
 end_time = datetime.datetime(today.year, today.month, today.day, 23, 59)

@@ -64,7 +64,7 @@ def portfolio():
     y=['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'META', 'ARM', 'NVDA', 'ORCL', 'JPM']
     cur = mysql.connection.cursor()
     for i in range(len(x)):
-        today = datetime.datetime(2023, 11, 12)
+        today = datetime.datetime.now()
         start_time = datetime.datetime(today.year, today.month, today.day, 0, 0)
         end_time = datetime.datetime(today.year, today.month, today.day, 23, 59)
         period1 = int(time.mktime(start_time.timetuple()))
