@@ -476,26 +476,6 @@ END$$
 DELIMITER ;
 
 DELIMITER $$
-CREATE TRIGGER revert_on_over_sell
-BEFORE INSERT ON transaction_history
-FOR EACH ROW
-BEGIN
-    DECLARE current_quantity INT;
-
-    -- Get the current quantity of the stock for the user
-    SELECT SUM(quantity) INTO current_quantity
-    FROM transaction_history
-    WHERE username = NEW.username AND symbol = NEW.symbol;
-
-    -- Check if the selling quantity is more than the available quantity
-    IF NEW.quantity < 0 AND ABS(NEW.quantity) > current_quantity THEN
-        -- Revert back to the unsold quantity
-        SET NEW.quantity =0;
-    END IF;
-END$$
-DELIMITER ;
-
-DELIMITER $$
 CREATE TRIGGER add_to_watchlist
 AFTER INSERT ON transaction_history
 FOR EACH ROW
@@ -515,4 +495,24 @@ BEGIN
 END$$
 DELIMITER ;
 
+-- Trigger to revert quantity if trying to sell more than available
+DELIMITER $$
+CREATE TRIGGER revert_on_over_sell
+BEFORE INSERT ON transaction_history
+FOR EACH ROW
+BEGIN
+    DECLARE current_quantity INT;
+
+    -- Get the current quantity of the stock for the user
+    SELECT SUM(quantity) INTO current_quantity
+    FROM transaction_history
+    WHERE username = NEW.username AND symbol = NEW.symbol;
+
+    -- Check if the selling quantity is more than the available quantity
+    IF NEW.quantity < 0 AND ABS(NEW.quantity) > current_quantity THEN
+        -- Revert back to the unsold quantity
+        SET NEW.quantity = -current_quantity;
+    END IF;
+END$$
+DELIMITER ;
 

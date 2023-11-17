@@ -7,6 +7,10 @@ from json import dumps
 import time
 import datetime
 import pandas as pd
+import yfinance as yf
+import matplotlib.pyplot as plt
+from io import BytesIO
+import base64
 
 app = Flask(__name__)
 mysql = MySQL(app)
@@ -17,7 +21,7 @@ app.permanent_session_lifetime = timedelta(minutes=10) # Session lasts for 10 mi
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'password123'
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_DB'] = 'portfolio'
+app.config['MYSQL_DB'] = 'portfolio3'
 # Default is tuples
 # app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
@@ -60,8 +64,8 @@ def portfolio():
         return render_template('alert1.html')
 
     # Query for holdings
-    x=['BIH','ELEX','HEX','HIH','KBL','LEC','LSL','NBL','NEPP','NIL']
-    y=['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'META', 'ARM', 'NVDA', 'ORCL', 'JPM']
+    x=['BIH','ELEX','HEX','HIH',    'KBL','LEC', 'LSL'  ,'NBL',  'NEPP',  'NIL']
+    y=['AAPL','GOOGL','MSFT','AMZN','TSLA','META','ARM','NVDA','ORCL','JPM']
     cur = mysql.connection.cursor()
     for i in range(len(x)):
         today = datetime.datetime.now()
@@ -73,7 +77,7 @@ def portfolio():
         query_string = f'https://query1.finance.yahoo.com/v7/finance/download/{y[i]}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
 
         df = pd.read_csv(query_string)
-        query_update='''update company_price set LTP="{}" where symbol="{}"'''.format(float(df['Open'][0]),x[i])
+        query_update='''update company_price set LTP="{}" where symbol="{}"'''.format(float(df['Open'][0]),y[i])
         cur.execute(query_update)
         mysql.connection.commit()
     user = [session['user']]
@@ -140,8 +144,35 @@ group by C.sector;
     piechart_dict = toPercentage(sectors_total)
     piechart_dict[0]['type'] = 'pie'
     piechart_dict[0]['hole'] = 0.4
+    ticker_symbols = ['AAPL', 'TSLA']
 
-    return render_template('portfolio.html', holdings=holdings, user=user[0], suggestions=suggestions, eps=eps, pe=pe, technical=technical, watchlist=watchlist, piechart=piechart_dict)
+    # Download historical stock data for the given symbols
+    stock_data = yf.download(ticker_symbols, start="2023-01-01", end="2023-12-31")
+
+    # Extract the 'Close' prices for plotting
+    stock_close = stock_data['Close']
+
+    # Plotting the stock prices
+    plt.figure(figsize=(10, 6))
+    plt.plot(stock_close.index, stock_close['AAPL'], label='Apple (AAPL)', color='blue')
+    plt.plot(stock_close.index, stock_close['TSLA'], label='Tesla (TSLA)', color='orange')
+    plt.title('Stock Price of Apple and Tesla in 2023')
+    plt.xlabel('Date')
+    plt.ylabel('Stock Price ($)')
+    plt.legend()
+    plt.grid(True)
+    plt.tight_layout()
+
+    # Save the plot as a bytes object
+    buffer = BytesIO()
+    plt.savefig(buffer, format='png')
+    buffer.seek(0)
+    plt.close()
+
+    # Convert the plot to base64 encoding
+    plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+
+    return render_template('portfolio.html', holdings=holdings, user=user[0], suggestions=suggestions, eps=eps, pe=pe, technical=technical, watchlist=watchlist, piechart=piechart_dict,plot_data=plot_data)
 
 
 def toPercentage(sectors_total):
@@ -188,17 +219,38 @@ def add_transaction():
         date = transaction_details['transaction_date']
         transaction_type = transaction_details['transaction_type']
         quantity = float(transaction_details['quantity'])
-        rate = float(transaction_details['rate'])
+        cur = mysql.connection.cursor()
+        print(transaction_details['rate'])
+        #rate = float(transaction_details['rate'])
+        if transaction_details['rate']=='':
+            today = datetime.datetime.now()
+            start_time = datetime.datetime(today.year, today.month, today.day, 0, 0)
+            end_time = datetime.datetime(today.year, today.month, today.day, 23, 59)
+            period1 = int(time.mktime(start_time.timetuple()))
+            period2 = int(time.mktime(end_time.timetuple()))
+            interval = '1d'  # 1d, 1m
+            query_string = f'https://query1.finance.yahoo.com/v7/finance/download/{symbol}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
+            df = pd.read_csv(query_string)
+            rate=float(df['Open'][0])
+        else:
+            rate = float(transaction_details['rate'])
         if transaction_type == 'Sell':
             quantity = -quantity
+            query='''select quantity from holdings_view where username="{}" and symbol="{}"'''.format(session['user'],symbol)
+            cur.execute(query)
+            entered_quantity=cur.fetchone()
+            print(entered_quantity,quantity)
+            if not entered_quantity or int(entered_quantity[0])-abs(quantity)<0:
+        
+                return render_template('alert3.html')
 
-        cur = mysql.connection.cursor()
+        #cur = mysql.connection.cursor()
         query = '''insert into transaction_history(username, symbol, transaction_date, quantity, rate) values
 (%s, %s, %s, %s, %s)'''
         values = [session['user'], symbol, date, quantity, rate]
         cur.execute(query, values)
         mysql.connection.commit()
-
+    
     return render_template('add_transaction.html', companies=companies)
 
 
