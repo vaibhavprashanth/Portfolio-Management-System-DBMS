@@ -153,10 +153,31 @@ group by C.sector;
     stock_close = stock_data['Close']
 
     # Plotting the stock prices
+    # plt.figure(figsize=(10, 6))
+    # plt.plot(stock_close.index, stock_close['AAPL'], label='Apple (AAPL)', color='blue')
+    # plt.plot(stock_close.index, stock_close['TSLA'], label='Tesla (TSLA)', color='orange')
+    # plt.title('Stock Price of Apple and Tesla in 2023')
+    # plt.xlabel('Date')
+    # plt.ylabel('Stock Price ($)')
+    # plt.legend()
+    # plt.grid(True)
+    # plt.tight_layout()
+    query_watchlist = '''select symbol, LTP, PC, round((LTP-PC), 2) AS CH, round(((LTP-PC)/PC)*100, 2) AS CH_percent from watchlist
+natural join company_price
+where username = %s
+order by (symbol)
+'''
+    cur.execute(query_watchlist, user)
+    watchlist = cur.fetchall()
+
+    # Get symbols from the watchlist
+    watchlist_symbols = [stock[0] for stock in watchlist]
     plt.figure(figsize=(10, 6))
-    plt.plot(stock_close.index, stock_close['AAPL'], label='Apple (AAPL)', color='blue')
-    plt.plot(stock_close.index, stock_close['TSLA'], label='Tesla (TSLA)', color='orange')
-    plt.title('Stock Price of Apple and Tesla in 2023')
+
+    for symbol in watchlist_symbols:
+        plt.plot(stock_data.index, stock_data['Close'][symbol], label=f'{symbol} ({symbol})')
+
+    plt.title('Stock Prices from Watchlist in 2023')
     plt.xlabel('Date')
     plt.ylabel('Stock Price ($)')
     plt.legend()

@@ -459,7 +459,7 @@ select * from transaction_history
 natural join company_price
 where username='rewan'
 group by symbol;
-
+-- Displays quantity more than 0
 -- Stored procedure for portfolio (holdings with profit/loss)
 DELIMITER $$
 CREATE PROCEDURE portfolio(in username varchar(30))
@@ -515,4 +515,6 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
+
+
 
