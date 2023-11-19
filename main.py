@@ -55,6 +55,25 @@ def index():
     else:
         return render_template('index.html', session=session)
 
+@app.route('/signup.html',methods=['GET', 'POST'])
+def register():
+    
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        phone = int(request.form.get('phone'))
+        email = request.form.get('email')
+        password_hashed = hashlib.sha224(password.encode()).hexdigest()
+        #mycon=mysql.connector.connect(host='localhost',user='root',database='portfolio3',password='password123')
+        cur = mysql.connection.cursor()
+        query='''insert into user_profile values('{}','{}',{},'{}')'''.format(username,email,phone,password_hashed)
+        cur.execute(query)
+        mysql.connection.commit()
+     
+
+    return render_template('signup.html')
+    
+    #return 'hi'
 
 @app.route('/portfolio.html')
 def portfolio():
@@ -81,6 +100,7 @@ def portfolio():
         cur.execute(query_update)
         mysql.connection.commit()
     user = [session['user']]
+    print(user)
     cur.callproc('portfolio', user)
     holdings = cur.fetchall()
 
@@ -92,6 +112,7 @@ order by (symbol)
 '''
     cur.execute(query_watchlist, user)
     watchlist = cur.fetchall()
+
 
     # Query for stock suggestion
     query_suggestions = '''select symbol, EPS, ROE, book_value, rsi, adx, pe_ratio, macd from company_price
@@ -144,7 +165,7 @@ group by C.sector;
     piechart_dict = toPercentage(sectors_total)
     piechart_dict[0]['type'] = 'pie'
     piechart_dict[0]['hole'] = 0.4
-    ticker_symbols = ['AAPL', 'TSLA']
+    ticker_symbols = ['AAPL', 'GOOGL', 'MSFT', 'AMZN', 'TSLA', 'META', 'ARM', 'NVDA', 'ORCL', 'JPM']
 
     # Download historical stock data for the given symbols
     stock_data = yf.download(ticker_symbols, start="2023-01-01", end="2023-12-31")
@@ -153,47 +174,36 @@ group by C.sector;
     stock_close = stock_data['Close']
 
     # Plotting the stock prices
-    # plt.figure(figsize=(10, 6))
-    # plt.plot(stock_close.index, stock_close['AAPL'], label='Apple (AAPL)', color='blue')
+    #plt.figure(figsize=(10, 6))
+  
+    #plt.plot(stock_close.index, stock_close['AAPL'], label='Apple (AAPL)', color='blue')
     # plt.plot(stock_close.index, stock_close['TSLA'], label='Tesla (TSLA)', color='orange')
+    # plt.plot(stock_close.index, stock_close['GOOGL'], label='Google (GOOGL)', color='black')
+    # plt.plot(stock_close.index, stock_close['MSFT'], label='Microsoft (MSFT)', color='orange')
+    # plt.plot(stock_close.index, stock_close['AMZN'], label='Amazon (AMZN)', color='orange')
+    # plt.plot(stock_close.index, stock_close['META'], label='META (META)', color='orange')
+    # plt.plot(stock_close.index, stock_close['ORCL'], label='ORCL (Oracle)', color='orange')
+    # plt.plot(stock_close.index, stock_close['NVDA'], label='NVDA (Nvidia)', color='orange')
+    # plt.plot(stock_close.index, stock_close['JPM'], label='JPM (JP Morgan)', color='orange')
+    # plt.plot(stock_close.index, stock_close['ARM'], label='ARM (ARM)', color='orange')
     # plt.title('Stock Price of Apple and Tesla in 2023')
     # plt.xlabel('Date')
     # plt.ylabel('Stock Price ($)')
     # plt.legend()
     # plt.grid(True)
     # plt.tight_layout()
-    query_watchlist = '''select symbol, LTP, PC, round((LTP-PC), 2) AS CH, round(((LTP-PC)/PC)*100, 2) AS CH_percent from watchlist
-natural join company_price
-where username = %s
-order by (symbol)
-'''
-    cur.execute(query_watchlist, user)
-    watchlist = cur.fetchall()
-
-    # Get symbols from the watchlist
-    watchlist_symbols = [stock[0] for stock in watchlist]
-    plt.figure(figsize=(10, 6))
-
-    for symbol in watchlist_symbols:
-        plt.plot(stock_data.index, stock_data['Close'][symbol], label=f'{symbol} ({symbol})')
-
-    plt.title('Stock Prices from Watchlist in 2023')
-    plt.xlabel('Date')
-    plt.ylabel('Stock Price ($)')
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
+    
 
     # Save the plot as a bytes object
-    buffer = BytesIO()
-    plt.savefig(buffer, format='png')
-    buffer.seek(0)
-    plt.close()
+    # buffer = BytesIO()
+    # plt.savefig(buffer, format='png')
+    # buffer.seek(0)
+    # plt.close()
 
-    # Convert the plot to base64 encoding
-    plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
+    # # Convert the plot to base64 encoding
+    # plot_data = base64.b64encode(buffer.getvalue()).decode('utf-8')
 
-    return render_template('portfolio.html', holdings=holdings, user=user[0], suggestions=suggestions, eps=eps, pe=pe, technical=technical, watchlist=watchlist, piechart=piechart_dict,plot_data=plot_data)
+    return render_template('portfolio.html', holdings=holdings, user=user[0], suggestions=suggestions, eps=eps, pe=pe, technical=technical, watchlist=watchlist, piechart=piechart_dict)
 
 
 def toPercentage(sectors_total):

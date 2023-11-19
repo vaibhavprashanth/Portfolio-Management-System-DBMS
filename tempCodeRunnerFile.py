@@ -1,0 +1,8 @@
+plt.plot(stock_close.index, stock_close['GOOGL'], label='Google (GOOGL)', color='orange')
+    # plt.plot(stock_close.index, stock_close['MSFT'], label='Microsoft (MSFT)', color='orange')
+    # plt.plot(stock_close.index, stock_close['TSLA'], label='Amazon (AMZN)', color='orange')
+    # plt.plot(stock_close.index, stock_close['TSLA'], label='META (META)', color='orange')
+    # plt.plot(stock_close.index, stock_close['TSLA'], label='ORCL (Oracle)', color='orange')
+    # plt.plot(stock_close.index, stock_close['TSLA'], label='NVDA (Nvidia)', color='orange')
+    # plt.plot(stock_close.index, stock_close['TSLA'], label='JPM (JP Morgan)', color='orange')
+    # plt.plot(stock_close.index, stock_close['TSLA'], label='ARM (ARM)', color='orange')

@@ -131,62 +131,62 @@ insert into user_profile values
 ('gtm', 'tha075@gmail.com', 9860000012, sha2('erewan123', 224));
 
 insert into company_profile values
-('KBL', 'Kumari Bank', 'Bank', 1000000000, 21212121221),
-('NIL', 'Nepal Insurance Limited', 'Life Insurance', 123232332, 131321321),
-('LEC', 'Libery Energy', 'Hydropower', 63233232, 61321321),
-('ELEX', 'Nepal Electronics Bank', 'Bank', 32323233232, 323321321321),
-('NEPP', 'Nepal Power', 'Hydropower', 102323233232, 10323321321321),
-('LSL', 'Life Saver Limited', 'Life Insurance', 23233232, 21321321),
-('NBL', 'Nepal Bank Limited', 'Bank', 532323233232, 5323321321321),
-('HEX', 'Hotel Electronics', 'Hotels', 82323233232, 823321321321),
-('HIH', 'Hotel Itahari', 'Hotels', 12323233232, 123321321321),
-('BIH', 'Bank of Itahari', 'Bank', 62323233232, 623321321321);
+('TSLA', 'Tesla', 'Automobile', 1000000000, 21212121221),
+('JPM', 'J P Morgan', 'Investment Banking', 123232332, 131321321),
+('META', 'Meta', 'Software', 63233232, 61321321),
+('GOOGL', 'Google', 'Software', 32323233232, 323321321321),
+('ORCL', 'Oracle', 'Database', 102323233232, 10323321321321),
+('ARM', 'Arm Inc', 'Hardware', 23233232, 21321321),
+('NVDA', 'Nvidia', 'Hardware', 532323233232, 5323321321321),
+('MSFT', 'Microsoft', 'Software', 82323233232, 823321321321),
+('AMZN', 'Amazon', 'Software', 12323233232, 123321321321),
+('AAPL', 'Apple', 'Software', 62323233232, 623321321321);
 
 insert into company_price (symbol, LTP, PC) values
-('KBL', 500, 470),
-('NIL', 5800, 6000),
-('LEC', 400, 410),
-('ELEX', 1010, 1000),
-('NEPP', 500, 480),
-('LSL', 1000, 1040),
-('NBL', 600, 580.5),
-('HEX', 1222.3, 1220),
-('HIH', 1500.5, 1499.4),
-('BIH', 788, 777);
+('TSLA', 500, 470),
+('JPM', 5800, 6000),
+('META', 400, 410),
+('GOOGL', 1010, 1000),
+('ORCL', 500, 480),
+('ARM', 1000, 1040),
+('NVDA', 600, 580.5),
+('MSFT', 1222.3, 1220),
+('AMZN', 1500.5, 1499.4),
+('AAPL', 788, 777);
 
 insert into fundamental_report(symbol, report_as_of, EPS, ROE, book_value) values
-('KBL', '77/78_q3', 20.5, 11.97, 120),
-('KBL', '77/78_q2', 19.5, 10, 110),  
-('NIL', '77/78_q3', 205, 50, 300),
-('NIL', '77/78_q2', 211, 55, 310),
-('LEC', '77/78_q3', 8, 4, 90),
-('LEC', '77/78_q2', 7.5, 3.5, 88),
-('ELEX', '77/78_q3', 34, 15, 180),
-('ELEX', '77/78_q2', 31, 13, 178),
-('NEPP', '77/78_q3', 21, 12, 119),
-('NEPP', '77/78_q2', 20, 11, 118),
-('LSL', '77/78_q3', 30, 12, 170),
-('LSL', '77/78_q2', 35.4, 13, 180.5),
-('NBL', '77/78_q3', 22, 13, 120),
-('NBL', '77/78_q2', 21, 12, 117),
-('HEX', '77/78_q3', 50, 15, 200),
-('HEX', '77/78_q2', 48, 14, 199),
-('HIH', '77/78_q3', 60, 20, 220),
-('HIH', '77/78_q2', 55, 18, 200),
-('BIH', '77/78_q3', 36, 20, 220),
-('BIH', '77/78_q2', 35, 21, 200);
+('TSLA', '77/78_q3', 20.5, 11.97, 120),
+('TSLA', '77/78_q2', 19.5, 10, 110),  
+('JPM', '77/78_q3', 205, 50, 300),
+('JPM', '77/78_q2', 211, 55, 310),
+('META', '77/78_q3', 8, 4, 90),
+('META', '77/78_q2', 7.5, 3.5, 88),
+('GOOGL', '77/78_q3', 34, 15, 180),
+('GOOGL', '77/78_q2', 31, 13, 178),
+('ORCL', '77/78_q3', 21, 12, 119),
+('ORCL', '77/78_q2', 20, 11, 118),
+('ARM', '77/78_q3', 30, 12, 170),
+('ARM', '77/78_q2', 35.4, 13, 180.5),
+('NVDA', '77/78_q3', 22, 13, 120),
+('NVDA', '77/78_q2', 21, 12, 117),
+('MSFT', '77/78_q3', 50, 15, 200),
+('MSFT', '77/78_q2', 48, 14, 199),
+('AMZN', '77/78_q3', 60, 20, 220),
+('AMZN', '77/78_q2', 55, 18, 200),
+('AAPL', '77/78_q3', 36, 20, 220),
+('AAPL', '77/78_q2', 35, 21, 200);
 
 insert into technical_signals(symbol, RSI, volume, ADX, MACD) values 
-('KBL', 65.1, 451000, 33.3, 'bull'), 
-('NIL', 50.5, 100000, 40, 'bull'), 
-('LEC', 20, 12344, 15, 'bear'),
-('ELEX', 70, 1200000, 30, 'bull'),
-('NEPP', 45, 212000, 16.5, 'bull'),
-('LSL', 53.4, 15312, 25.29, 'bull'),
-('NBL', 66.41, 406121, 34.66, 'bull'),
-('HEX', 40.2, 34000, 40, 'side'),
-('HIH', 35, 120000, 30, 'side'),
-('BIH', 75, 335000, 44, 'bull');
+('TSLA', 65.1, 451000, 33.3, 'bull'), 
+('JPM', 50.5, 100000, 40, 'bull'), 
+('META', 20, 12344, 15, 'bear'),
+('GOOGL', 70, 1200000, 30, 'bull'),
+('ORCL', 45, 212000, 16.5, 'bull'),
+('ARM', 53.4, 15312, 25.29, 'bull'),
+('NVDA', 66.41, 406121, 34.66, 'bull'),
+('MSFT', 40.2, 34000, 40, 'side'),
+('AMZN', 35, 120000, 30, 'side'),
+('AAPL', 75, 335000, 44, 'bull');
 
 -- Updating LTP values in technical_signals
 UPDATE technical_signals A
@@ -195,59 +195,59 @@ SET A.LTP = B.LTP
 WHERE A.symbol = B.symbol;
 
 insert into dividend_history values
-('KBL', '76/77', 5, 10),
-('KBL', '75/76', 4, 11),
-('NIL', '76/77', 10, 15),
-('NIL', '75/76', 10, 13),
-('LEC', '76/77', 0, 0), 
-('LEC', '75/76', 0, 0),
-('ELEX', '76/77', 20, 10), 
-('ELEX', '75/76', 14, 10),
-('NEPP', '76/77', 0, 0),
-('NEPP', '75/76', 0, 0),
-('LSL', '76/77', 5, 10),
-('LSL', '75/76', 5, 10),
-('NBL', '76/77', 11, 5),
-('NBL', '75/76', 11, 0),
-('HEX', '76/77', 0, 0),
-('HEX', '75/76', 0, 0),
-('HIH', '76/77', 0, 0),
-('HIH', '75/76', 0, 0),
-('BIH', '76/77', 20, 25),
-('BIH', '75/76', 15, 20);
+('TSLA', '76/77', 5, 10),
+('TSLA', '75/76', 4, 11),
+('JPM', '76/77', 10, 15),
+('JPM', '75/76', 10, 13),
+('META', '76/77', 0, 0), 
+('META', '75/76', 0, 0),
+('GOOGL', '76/77', 20, 10), 
+('GOOGL', '75/76', 14, 10),
+('ORCL', '76/77', 0, 0),
+('ORCL', '75/76', 0, 0),
+('ARM', '76/77', 5, 10),
+('ARM', '75/76', 5, 10),
+('NVDA', '76/77', 11, 5),
+('NVDA', '75/76', 11, 0),
+('MSFT', '76/77', 0, 0),
+('MSFT', '75/76', 0, 0),
+('AMZN', '76/77', 0, 0),
+('AMZN', '75/76', 0, 0),
+('AAPL', '76/77', 20, 25),
+('AAPL', '75/76', 15, 20);
 
 insert into watchlist values
-('rewan', 'KBL'),
-('rewan', 'HEX'),
-('rewan', 'HIH'),
-('rewan', 'BIH'),
-('mahesh', 'HEX'),
-('mahesh', 'ELEX'),
-('mahesh', 'LEC'),
-('suman', 'NEPP'),
-('suman', 'LSL'),
-('madhu', 'ELEX'),
-('madhu', 'HEX'),
-('madhu', 'NBL'),
-('sobit', 'HEX'),
-('sobit', 'LEC'),
-('rayone','HIH');
+('rewan', 'TSLA'),
+('rewan', 'MSFT'),
+('rewan', 'AMZN'),
+('rewan', 'AAPL'),
+('mahesh', 'MSFT'),
+('mahesh', 'GOOGL'),
+('mahesh', 'META'),
+('suman', 'ORCL'),
+('suman', 'ARM'),
+('madhu', 'GOOGL'),
+('madhu', 'MSFT'),
+('madhu', 'NVDA'),
+('sobit', 'MSFT'),
+('sobit', 'META'),
+('rayone','AMZN');
 
 insert into news(news_id, title, sources, date_of_news, related_company) values
-(1, 'Kumari Bank announces right share of 1:1', 'myRepublica', '2021-07-01', 'KBL'),
-(2, 'Liberty energy to test production soon', 'merokhabar', '2021-07-04', 'LEC'),
-(3, "Hotel itahari expands it's area", 'itaharinews', '2021-07-05', 'HIH'),
-(4, "CEO of Nepal Insurance Limited resigns immediately", 'ekantipur', '2021-07-10', 'NIL'),
-(4, "CEO of Nepal Insurance Limited resigns immediately", 'myRepublica', '2021-07-10', 'NIL');
+(1, 'Kumari Bank announces right share of 1:1', 'myRepublica', '2021-07-01', 'TSLA'),
+(2, 'Liberty energy to test production soon', 'merokhabar', '2021-07-04', 'META'),
+(3, "Hotel itahari expands it's area", 'itaharinews', '2021-07-05', 'AMZN'),
+(4, "CEO of Nepal Insurance Limited resigns immediately", 'ekantipur', '2021-07-10', 'JPM'),
+(4, "CEO of Nepal Insurance Limited resigns immediately", 'myRepublica', '2021-07-10', 'JPM');
 
 insert into transaction_history(username, symbol, transaction_date, quantity, rate) values
-('rewan', 'HEX', '2021-07-01', 100, 1200),
-('rewan', 'HIH', '2021-07-02', 55, 1480),
-('rewan', 'HIH', '2021-07-06', -20, 1500),
-('suman', 'LEC', '2021-07-10', 10, 420),
-('suman', 'LEC', '2021-07-15', 10, 410),
-('rewan', 'BIH', '2021-07-20', 120, 785.5),
-('rewan', 'LSL', '2021-07-20', 55, 1001);
+('rewan', 'MSFT', '2021-07-01', 100, 1200),
+('rewan', 'AMZN', '2021-07-02', 55, 1480),
+('rewan', 'AMZN', '2021-07-06', -20, 1500),
+('suman', 'META', '2021-07-10', 10, 420),
+('suman', 'META', '2021-07-15', 10, 410),
+('rewan', 'AAPL', '2021-07-20', 120, 785.5),
+('rewan', 'ARM', '2021-07-20', 55, 1001);
 
 -- Holdings
 Create view holdings_view as
@@ -276,7 +276,7 @@ select F.symbol, report_as_of, LTP, eps, roe, book_value, round(LTP/eps, 2) as p
 from fundamental_report F
 inner join company_price C
 on F.symbol = C.symbol
-where F.symbol = 'BIH';
+where F.symbol = 'AAPL';
 
 -- Technical report
 select A.symbol, sector, LTP, volume, RSI, ADX, MACD from technical_signals A 
@@ -462,17 +462,19 @@ group by symbol;
 -- Displays quantity more than 0
 -- Stored procedure for portfolio (holdings with profit/loss)
 DELIMITER $$
-CREATE PROCEDURE portfolio(in username varchar(30))
+CREATE PROCEDURE portfolio(IN username VARCHAR(30))
 BEGIN
-select symbol, sum(quantity) as quantity, LTP
-,round((getTotal(-sum(quantity)*LTP)), 2) as current_value,
-capGain(round((getTotal(-sum(quantity)*LTP)) - (getTotal(sum(quantity)*rate)), 2), transaction_date) as profit_loss
-from transaction_history T
-natural join company_price C
-where username = username
-group by symbol
-HAVING quantity > 0;
-END$$
+    SELECT symbol, 
+           SUM(quantity) AS quantity, 
+           LTP,
+           ROUND((getTotal(-SUM(quantity) * LTP)), 2) AS current_value,
+           capGain(ROUND((getTotal(-SUM(quantity) * LTP)) - (getTotal(SUM(quantity) * rate)), 2), transaction_date) AS profit_loss
+    FROM transaction_history T
+    NATURAL JOIN company_price C
+    WHERE T.username = username  -- Use the table alias to refer to the column
+    GROUP BY symbol
+    HAVING quantity > 0;
+END $$
 DELIMITER ;
 
 DELIMITER $$
@@ -515,6 +517,4 @@ BEGIN
     END IF;
 END$$
 DELIMITER ;
-
-
 
