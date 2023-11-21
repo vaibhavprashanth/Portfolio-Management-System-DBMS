@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, session
+from flask import Flask, render_template, request, session,jsonify
 from flask_mysqldb import MySQL
 from datetime import timedelta
 import hashlib
@@ -25,8 +25,78 @@ app.config['MYSQL_DB'] = 'portfolio3'
 # Default is tuples
 # app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
-@app.route('/', methods=['GET', 'POST'])
-def index():
+# @app.route('/', methods=['GET', 'POST'])
+# def index():
+#     if request.method == 'POST':
+#         session.permanent = True
+#         user_details = request.form
+#         try:
+#             # If not logged in case
+#             username = user_details['username']
+#             password = user_details['password']
+
+#             # Password hashing to 224 characters
+#             password_hashed = hashlib.sha224(password.encode()).hexdigest()
+#         except:
+#             if request.form['logout'] == '':
+#                 # If logged in case (for signout form return)
+#                 session.pop('user')
+#             return render_template('/index.html', session=session)
+#         cur = mysql.connection.cursor()
+#         cur.execute('''select username, user_password from user_profile''')
+#         mysql.connection.commit()
+#         all_users = cur.fetchall()
+#         for user in all_users:
+#             # Check if the entered username and password is correct
+#             if user[0] == username and user[1] == password_hashed:
+#                 session['user'] = username
+#                 return portfolio()
+#         return render_template('alert2.html')
+#     else:
+#         return render_template('index.html', session=session)
+
+@app.route("/quote")
+def display_quote():
+    # Get a stock ticker symbol from the query string
+    # Default to AAPL
+    symbol = request.args.get('symbol', default="AAPL")
+
+    # Pull the stock quote
+    try:
+        quote = yf.Ticker(symbol)
+        quote_info = quote.info
+    except Exception as e:
+        # Handle error gracefully and provide a meaningful message
+        return jsonify({"error": str(e)})
+
+    # Return the quote as JSON
+    return jsonify(quote_info)
+
+# API route for pulling the stock history
+@app.route("/history")
+def display_history():
+    # Get the query string parameters
+    symbol = request.args.get('symbol', default="AAPL")
+    period = request.args.get('period', default="1y")
+    interval = request.args.get('interval', default="1mo")
+
+    # Pull the quote
+    try:
+        quote = yf.Ticker(symbol)
+        hist = quote.history(period=period, interval=interval)
+    except Exception as e:
+        # Handle error gracefully and provide a meaningful message
+        return jsonify({"error": str(e)})
+
+    # Convert the historical data to JSON
+    data = hist.to_json()
+
+    # Return the JSON in the HTTP response
+    return data
+
+# This is the / route, or the main landing page route.
+@app.route("/",methods=['GET', 'POST'])
+def home():
     if request.method == 'POST':
         session.permanent = True
         user_details = request.form
@@ -41,7 +111,7 @@ def index():
             if request.form['logout'] == '':
                 # If logged in case (for signout form return)
                 session.pop('user')
-            return render_template('/index.html', session=session)
+            return render_template('/homepage.html', session=session)
         cur = mysql.connection.cursor()
         cur.execute('''select username, user_password from user_profile''')
         mysql.connection.commit()
@@ -53,7 +123,30 @@ def index():
                 return portfolio()
         return render_template('alert2.html')
     else:
-        return render_template('index.html', session=session)
+        return render_template('homepage.html', session=session)
+    
+    # Use Flask's render_template method to render a website template.
+@app.route('/login',methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form.get('username')
+        password = request.form.get('password')
+        password_hashed = hashlib.sha224(password.encode()).hexdigest()
+
+        cur = mysql.connection.cursor()
+        cur.execute('''select username, user_password from user_profile''')
+        mysql.connection.commit()
+        all_users = cur.fetchall()
+        for user in all_users:
+            # Check if the entered username and password is correct
+            if user[0] == username and user[1] == password_hashed:
+                session['user'] = username
+                return portfolio()
+
+        return render_template('alert2.html')
+    else:
+        return render_template('login.html', session=session)
+
 
 @app.route('/signup.html',methods=['GET', 'POST'])
 def register():
@@ -93,10 +186,15 @@ def portfolio():
         period1 = int(time.mktime(start_time.timetuple()))
         period2 = int(time.mktime(end_time.timetuple()))
         interval = '1d'  # 1d, 1m
-        query_string = f'https://query1.finance.yahoo.com/v7/finance/download/{y[i]}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
+        #query_string = f'https://query1.finance.yahoo.com/v7/finance/download/{y[i]}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
+        ticker = yf.Ticker(y[i])
 
-        df = pd.read_csv(query_string)
-        query_update='''update company_price set LTP="{}" where symbol="{}"'''.format(float(df['Open'][0]),y[i])
+        current_price = ticker.history(period='1d')['Close'].iloc[-1]
+        #df = pd.read_csv(query_string)
+        query_update='''update company_price set LTP="{}" where symbol="{}"'''.format(current_price,y[i])
+        cur.execute(query_update)
+        mysql.connection.commit()
+        query_update='''update technical_signals set LTP="{}" where symbol="{}"'''.format(current_price,y[i])
         cur.execute(query_update)
         mysql.connection.commit()
     user = [session['user']]
