@@ -42,7 +42,8 @@
             <a class="navbar-brand fw-normal" href="#">VNFinance</a>
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {% if "user" not in session %}
-                <div class="mx-2 my-2">
+                <div class="mx-7 my-2">
+                    ‎ ‎ ‎ ‎ ‎‎
                     <button class="btn btn-info" data-bs-toggle="modal" data-bs-target="#loginModal"
                         type="submit">Login</button>
 
@@ -83,11 +84,16 @@
                             </div>
                         </div>
                     </div>
-
+                
                     <!--Signup Button -->
-                    <button class="btn btn-info mx-4" data-bs-toggle="modal" data-bs-target="#signupModal"
-                        type="submit" style="background-color: rgb(33, 192, 33);">Register</button>
-
+                    <div class="mx-8 my-2">
+                    <form action="/signup.html">
+                        <button class="btn btn-info mx-4" style="background-color: rgb(33, 192, 33)" type="submit">Register</button>
+                    </form>
+                </div>
+                    <!-- <button class="btn btn-info mx-4" data-bs-toggle="modal" data-bs-target="#signupModal"
+                        type="submit" style="background-color: rgb(33, 192, 33);">Register</button> -->
+                    <!-- <a href="/signup.html">Register</a> -->
                     <!--Signup Modal -->
                     <div class="modal fade" id="signupModal" tabindex="-1" aria-labelledby="signupModalLabel"
                         aria-hidden="true">

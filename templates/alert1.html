@@ -3,43 +3,83 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>login first</title>
+    <title>Login First</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.7.0/animate.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.3.1/css/all.min.css" rel="stylesheet">
+    <style>
+        /* Your CSS styles */
+        .border-width-4 {
+            border-width: 4px !important;
+        }
+
+        .overflow-x-hidden {
+            overflow-x: hidden;
+        }
+
+        .h-100vh {
+            height: 100vh;
+        }
+
+        .z-index-1 {
+            z-index: 1;
+        }
+
+        .z-index-2 {
+            z-index: 2;
+        }
+
+        .opacity-05 {
+            opacity: 0.5;
+        }
+
+        .delay-01s {
+            animation-delay: 0.2s;
+        }
+
+        .delay-02s {
+            animation-delay: 0.4s;
+        }
+
+        .delay-03s {
+            animation-delay: 0.6s;
+        }
+
+        .delay-04s {
+            animation-delay: 0.8s;
+        }
+
+        .delay-05s {
+            animation-delay: 1s;
+        }
+    </style>
 </head>
-<style>
-    body {
-        background-color: rgb(236, 244, 252);
-    }
-
-    main.container {
-        background-color: rgb(22, 96, 170);
-        width: 50%;
-        justify-content: center;
-        margin: auto;
-        margin-top: 30vh;        
-        border: 0.2rem solid rgb(0, 78, 78);
-        border-radius: 0.8rem;
-
-    }
-    h2{
-        color:rgb(14, 14, 14);
-    }
-    h3>a{
-        color:rgb(227, 255, 255);
-    }
-    h3>a:hover{
-        color:deepskyblue;
-    }
-</style>
 
 <body>
-    <main class="container">
-        <center>
-            <h2>Please login first</h2>
-            <h3><a href="/">Home</a></h3>
-        </center>
-    </main>
+    <div class="bg-light h-100vh position-relative py-5 overflow-x-hidden">
+        <div class="position-relative py-1 mx-auto rounded z-index-2 animated bounceInUp" style="max-width: 554px;">
+
+            <div role="alert" class="mx-3 mb-3 shadow-lg animated flipInX delay-05s">
+                <div class="px-4 py-1 bg-primary text-white rounded-top">Please Login First</div>
+                <div class="px-4 py-3 bg-white d-flex rounded-bottom">
+                    <i class="fas fa-exclamation-circle opacity-05 text-dark my-1 mr-3"></i>
+                    <p><a href="/">Click here to go back to Home</a></p>
+                </div>
+            </div>
+
+            <div class="small mx-3 text-muted text-center">.</div>
+        </div>
+
+        <i class="position-absolute fas fa-exclamation-triangle text-white animated infinite pulse slower"
+            style="top: 0; left: 0; font-size: 15em;"></i>
+        <i class="position-absolute fas fa-exclamation-circle text-white animated infinite pulse slower delay-1s"
+            style="bottom: 0; right: -0.5em; font-size: 30em"></i>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.min.js"></script>
 </body>
 
 </html>

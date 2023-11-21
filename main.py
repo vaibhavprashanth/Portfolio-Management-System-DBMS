@@ -88,8 +88,8 @@ def portfolio():
     cur = mysql.connection.cursor()
     for i in range(len(x)):
         today = datetime.datetime.now()
-        start_time = datetime.datetime(today.year, today.month, today.day, 0, 0)
-        end_time = datetime.datetime(today.year, today.month, today.day, 23, 59)
+        start_time = datetime.datetime(today.year, today.month, today.day-1, 0, 0)
+        end_time = datetime.datetime(today.year, today.month, today.day-1, 23, 59)
         period1 = int(time.mktime(start_time.timetuple()))
         period2 = int(time.mktime(end_time.timetuple()))
         interval = '1d'  # 1d, 1m
@@ -171,7 +171,7 @@ group by C.sector;
     stock_data = yf.download(ticker_symbols, start="2023-01-01", end="2023-12-31")
 
     # Extract the 'Close' prices for plotting
-    stock_close = stock_data['Close']
+    #stock_close = stock_data['Close']
 
     # Plotting the stock prices
     #plt.figure(figsize=(10, 6))
@@ -192,7 +192,18 @@ group by C.sector;
     # plt.legend()
     # plt.grid(True)
     # plt.tight_layout()
+    #stock_data=pd.DataFrame(stock_data['Close'])
+
+
+# # Plotting multiple columns without using a for loop
     
+
+    # # Plotting multiple columns without using a for loop
+    # stock_data.plot(figsize=(8, 6))  # Plotting all columns against the index
+    # plt.xlabel('Date')
+    # plt.ylabel('Price')
+    # plt.legend(title='Stocks')  # Adding a legend with column names as labels
+    # plt.show()
 
     # Save the plot as a bytes object
     # buffer = BytesIO()
