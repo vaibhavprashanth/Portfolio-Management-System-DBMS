@@ -21,7 +21,7 @@ app.permanent_session_lifetime = timedelta(minutes=10) # Session lasts for 10 mi
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'password123'
 app.config['MYSQL_HOST'] = 'localhost'
-app.config['MYSQL_DB'] = 'portfolio3'
+app.config['MYSQL_DB'] = 'portfolio4'
 # Default is tuples
 # app.config['MYSQL_CURSORCLASS'] = 'DictCursor'
 
@@ -354,42 +354,47 @@ def add_transaction():
     companies = cur.fetchall()
 
     if request.method == 'POST':
-        transaction_details = request.form
-        symbol = transaction_details['symbol']
-        date = transaction_details['transaction_date']
-        transaction_type = transaction_details['transaction_type']
-        quantity = float(transaction_details['quantity'])
-        cur = mysql.connection.cursor()
-        print(transaction_details['rate'])
-        #rate = float(transaction_details['rate'])
-        if transaction_details['rate']=='':
-            today = datetime.datetime.now()
-            start_time = datetime.datetime(today.year, today.month, today.day, 0, 0)
-            end_time = datetime.datetime(today.year, today.month, today.day, 23, 59)
-            period1 = int(time.mktime(start_time.timetuple()))
-            period2 = int(time.mktime(end_time.timetuple()))
-            interval = '1d'  # 1d, 1m
-            query_string = f'https://query1.finance.yahoo.com/v7/finance/download/{symbol}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
-            df = pd.read_csv(query_string)
-            rate=float(df['Open'][0])
-        else:
-            rate = float(transaction_details['rate'])
-        if transaction_type == 'Sell':
-            quantity = -quantity
-            query='''select quantity from holdings_view where username="{}" and symbol="{}"'''.format(session['user'],symbol)
-            cur.execute(query)
-            entered_quantity=cur.fetchone()
-            print(entered_quantity,quantity)
-            if not entered_quantity or int(entered_quantity[0])-abs(quantity)<0:
-        
-                return render_template('alert3.html')
+        try:
+            transaction_details = request.form
+            symbol = transaction_details['symbol']
+            date = transaction_details['transaction_date']
+            transaction_type = transaction_details['transaction_type']
+            quantity = float(transaction_details['quantity'])
+            cur = mysql.connection.cursor()
+            print(transaction_details['rate'])
+            #rate = float(transaction_details['rate'])
+            if transaction_details['rate']=='':
+                today = datetime.datetime.now()
+                start_time = datetime.datetime(today.year, today.month, today.day, 0, 0)
+                end_time = datetime.datetime(today.year, today.month, today.day, 23, 59)
+                period1 = int(time.mktime(start_time.timetuple()))
+                period2 = int(time.mktime(end_time.timetuple()))
+                interval = '1d'  # 1d, 1m
+                query_string = f'https://query1.finance.yahoo.com/v7/finance/download/{symbol}?period1={period1}&period2={period2}&interval={interval}&events=history&includeAdjustedClose=true'
+                df = pd.read_csv(query_string)
+                rate=float(df['Open'][0])
+            else:
+                rate = float(transaction_details['rate'])
+            if transaction_type == 'Sell':
+                quantity = -quantity
+                query='''select quantity from holdings_view where username="{}" and symbol="{}"'''.format(session['user'],symbol)
+                cur.execute(query)
+                entered_quantity=cur.fetchone()
+                print(entered_quantity,quantity)
+                if not entered_quantity or int(entered_quantity[0])-abs(quantity)<0:
+            
+                    return render_template('alert3.html')
 
-        #cur = mysql.connection.cursor()
-        query = '''insert into transaction_history(username, symbol, transaction_date, quantity, rate) values
-(%s, %s, %s, %s, %s)'''
-        values = [session['user'], symbol, date, quantity, rate]
-        cur.execute(query, values)
-        mysql.connection.commit()
+            #cur = mysql.connection.cursor()
+            
+            query = '''insert into transaction_history(username, symbol, transaction_date, quantity, rate) values
+        (%s, %s, %s, %s, %s)'''
+            values = [session['user'], symbol, date, quantity, rate]
+            cur.execute(query, values)
+            mysql.connection.commit()
+        except:
+            return render_template('alert3.html')
+
     
     return render_template('add_transaction.html', companies=companies)
 

@@ -234,11 +234,11 @@ insert into watchlist values
 ('rayone','AMZN');
 
 insert into news(news_id, title, sources, date_of_news, related_company) values
-(1, 'Kumari Bank announces right share of 1:1', 'myRepublica', '2021-07-01', 'TSLA'),
-(2, 'Liberty energy to test production soon', 'merokhabar', '2021-07-04', 'META'),
-(3, "Hotel itahari expands it's area", 'itaharinews', '2021-07-05', 'AMZN'),
-(4, "CEO of Nepal Insurance Limited resigns immediately", 'ekantipur', '2021-07-10', 'JPM'),
-(4, "CEO of Nepal Insurance Limited resigns immediately", 'myRepublica', '2021-07-10', 'JPM');
+(1, 'Elon Musk buys Twitter, TSLA stock drops', 'EM News', '2023-07-01', 'TSLA'),
+(2, 'Mark Zukerberg Metaverse plans fail, META stock drops', 'merokhabar', '2023-07-04', 'META'),
+(3, "Jeff Bezo becomes 2nd richest man after Elon ", 'itaharinews', '2023-07-05', 'AMZN'),
+(4, "CEO of OpenAI joins Microsoft, stock price rises", 'MS News', '2023-11-20', 'MSFT'),
+(4, "JP Morga has his bad year due to recession", 'myRepublica', '2023-07-10', 'JPM');
 
 insert into transaction_history(username, symbol, transaction_date, quantity, rate) values
 ('rewan', 'MSFT', '2021-07-01', 100, 1200),
@@ -459,6 +459,7 @@ select * from transaction_history
 natural join company_price
 where username='rewan'
 group by symbol;
+
 -- Displays quantity more than 0
 -- Stored procedure for portfolio (holdings with profit/loss)
 DELIMITER $$
@@ -477,6 +478,7 @@ BEGIN
 END $$
 DELIMITER ;
 
+-- adds tsock to watchlist if added to holdings
 DELIMITER $$
 CREATE TRIGGER add_to_watchlist
 AFTER INSERT ON transaction_history

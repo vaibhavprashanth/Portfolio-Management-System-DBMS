@@ -70,7 +70,7 @@ Site.prototype.RenderChart = function(data, quote){
 
 	Highcharts.chart('chart_container', {
 		title: {
-			text: title
+			text: "Real time stock"
 		},
 		yAxis: {
 			title: {
